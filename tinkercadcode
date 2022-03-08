@@ -1,0 +1,65 @@
+int outputPin0 = 2; // outputpin for led
+int inputPin0 = 4; // inputpin for pushbutton
+int inputPin1 = 3; // inputpin for ir
+int inputPin2 = 5; // inputpin for pir sensor
+int input0state = 0;
+int input1state = 0;
+int input2state = 0;
+
+void setup(){
+  pinMode(outputPin0, OUTPUT);
+  pinMode(inputPin0, INPUT);
+  pinMode(inputPin1, INPUT);
+  pinMode(inputPin2, INPUT);
+  Serial.begin(9600);
+}
+
+void loop(){
+  	input0state = digitalRead(4);
+	input1state = digitalRead(3);
+	input2state	= digitalRead(5);
+      
+       if (input0state == HIGH) {
+       digitalWrite(outputPin0, HIGH);
+       Serial.println("Pushbutton activated!");
+       } else {
+       digitalWrite(outputPin0, LOW);
+      }
+  delay(100); // Delay a little bit to improve simulation performance
+  
+       if (input1state == HIGH) {
+       digitalWrite(outputPin0, HIGH);
+       Serial.println("Ultrasonic activated!");
+       } else {
+       digitalWrite(outputPin0, LOW);
+      }
+  delay(100); // Delay a little bit to improve simulation performance
+  
+         if (input2state == HIGH) {
+       digitalWrite(outputPin0, HIGH);
+       Serial.println("PIR activated!");
+       } else {
+       digitalWrite(outputPin0, LOW);
+      }
+  delay(100); // Delay a little bit to improve simulation performance
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

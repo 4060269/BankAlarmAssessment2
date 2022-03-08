@@ -1,17 +1,17 @@
 int outputPin0 = 2; // outputpin for led
 int inputPin0 = 4; // inputpin for pushbutton
-int inputPin1 = 3; // inputpin for ir
+int inputPin1 = 3; // inputpin for ultrasonic
 int inputPin2 = 5; // inputpin for pir sensor
-int input0state = 0;
-int input1state = 0;
-int input2state = 0;
+int input0state = 0; // creating a variable which stores the state, 0 meaning pushbutton
+int input1state = 0; // creating a variable which stores the state, 1 meaning ultrasonic
+int input2state = 0; // creating a variable which stores the state, 2 meaning pir
 
 void setup(){
-  pinMode(outputPin0, OUTPUT);
-  pinMode(inputPin0, INPUT);
-  pinMode(inputPin1, INPUT);
-  pinMode(inputPin2, INPUT);
-  Serial.begin(9600);
+  pinMode(outputPin0, OUTPUT); // defining that the variable storing the pin is to be an output
+  pinMode(inputPin0, INPUT); // defining that the variable storing the pin is to be an input
+  pinMode(inputPin1, INPUT); // defining that the variable storing the pin is to be an input
+  pinMode(inputPin2, INPUT); // defining that the variable storing the pin is to be an input
+  Serial.begin(9600); // opens a 9600 bit communication lane over the usb data line
 }
 
 void loop(){
@@ -22,44 +22,17 @@ void loop(){
        if (input0state == HIGH) {
        digitalWrite(outputPin0, HIGH);
        Serial.println("Pushbutton activated!");
-       } else {
-       digitalWrite(outputPin0, LOW);
       }
-  delay(100); // Delay a little bit to improve simulation performance
+  delay(100); // delay to improve simulation performance
   
        if (input1state == HIGH) {
        digitalWrite(outputPin0, HIGH);
        Serial.println("Ultrasonic activated!");
-       } else {
-       digitalWrite(outputPin0, LOW);
       }
-  delay(100); // Delay a little bit to improve simulation performance
+  delay(100); // delay to improve simulation performance
   
-         if (input2state == HIGH) {
+       if (input2state == HIGH) {
        digitalWrite(outputPin0, HIGH);
-       Serial.println("PIR activated!");
-       } else {
-       digitalWrite(outputPin0, LOW);
       }
-  delay(100); // Delay a little bit to improve simulation performance
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  delay(100); // delay to improve simulation performance
 }

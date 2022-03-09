@@ -1,13 +1,17 @@
 int alarmPin = 2; // outputpin for led
 int pushbuttonPin = 4; // inputpin for pushbutton
+int pirPin = 5; // inputpin for pir sensor
+
+// for ultrasonic sensor
 int ultratrigPin = 3; // inputpin for ultrasonic trigger pin
 int ultraechoPin = 6; // inputpin for ultrasonic echo pin
-int pirPin = 5; // inputpin for pir sensor
+long duration, cm;
+
 
 void setup(){
   pinMode(alarmPin, OUTPUT); // defining that the variable storing the pin is to be an output
   pinMode(pushbuttonPin, INPUT); // defining that the variable storing the pin is to be an input
-  pinMode(ultratrigPin, INPUT);
+  pinMode(ultratrigPin, OUTPUT);
   pinMode(ultraechoPin, INPUT); // defining that the variable storing the pin is to be an input
   pinMode(pirPin, INPUT); // defining that the variable storing the pin is to be an input
   Serial.begin(9600); // opens a 9600 bit communication lane over the usb data line
@@ -17,15 +21,34 @@ void setup(){
 void loop(){
   int pushbuttonState = digitalRead(pushbuttonPin);
   int pirState = digitalRead(pirPin);
-      
-       if (pushbuttonState && pirState == HIGH) {
-       digitalWrite(alarmPin, HIGH);
+  digitalWrite(ultratrigPin, LOW);
+delayMicroseconds(5);
+digitalWrite(ultratrigPin, HIGH);
+delayMicroseconds(10);
+digitalWrite(ultratrigPin, LOW);
+  
+  long ultraState = duration = pulseIn(ultraechoPin, HIGH);
+ 	 cm = (duration/2) / 29.1;
+ 	 Serial.println();
+ 	 delay(250);
+  
+       if (pushbuttonState == HIGH) {
+       Serial.println(pushbuttonState);
        delay(100); // delay to improve simulation performance
-       Serial.println("Pushbutton activated!");
        }  
-
-       /* if (pirState == HIGH) {
-       digitalWrite(alarmPin, HIGH);
+  
+  	   if (ultraState > 50.5) {
+       Serial.println(cm);
+       Serial.println("cm");
+       }
+    
+  
+       if (pirState == HIGH) {
+       Serial.println("PIR activated!");
        delay(100); // delay to improve simulation performance
-      }      */ 
+      }     
+}
+
+void triggerAlarm(){
+  
 }

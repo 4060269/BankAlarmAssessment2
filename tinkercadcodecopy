@@ -1,11 +1,10 @@
 int alarmPin = 2; // outputpin for led
 int pushbuttonPin = 4; // inputpin for pushbutton
 int pirPin = 5; // inputpin for pir sensor
-
-// for ultrasonic sensor
 int ultratrigPin = 3; // inputpin for ultrasonic trigger pin
 int ultraechoPin = 6; // inputpin for ultrasonic echo pin
-long duration, cm;
+long duration; // the duration of sound wave travel
+int distance; // the distance measurement
 
 
 void setup(){
@@ -21,34 +20,43 @@ void setup(){
 void loop(){
   int pushbuttonState = digitalRead(pushbuttonPin);
   int pirState = digitalRead(pirPin);
-  digitalWrite(ultratrigPin, LOW);
-delayMicroseconds(5);
-digitalWrite(ultratrigPin, HIGH);
-delayMicroseconds(10);
-digitalWrite(ultratrigPin, LOW);
-  
-  long ultraState = duration = pulseIn(ultraechoPin, HIGH);
- 	 cm = (duration/2) / 29.1;
- 	 Serial.println();
- 	 delay(250);
   
        if (pushbuttonState == HIGH) {
-       Serial.println(pushbuttonState);
-       delay(100); // delay to improve simulation performance
-       }  
-  
-  	   if (ultraState > 50.5) {
-       Serial.println(cm);
-       Serial.println("cm");
-       }
-    
+       Serial.println("Button activated!");
+       delay(150); // delay to improve simulation performance
+       }     
   
        if (pirState == HIGH) {
        Serial.println("PIR activated!");
-       delay(100); // delay to improve simulation performance
-      }     
-}
+       delay(150); // delay to improve simulation performance
+      } 
+  
+ 	  int distanceThreshold = 150;
+      // Clears the trigPin condition
+      digitalWrite(ultratrigPin, LOW);
+      delayMicroseconds(2);
+      // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
+      digitalWrite(ultratrigPin, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(ultratrigPin, LOW);
+      // Reads the echoPin, returns the sound wave travel time in microseconds
+      duration = pulseIn(ultraechoPin, HIGH);
+      // Calculating the distance
+      distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
+      // Displays the distance on the Serial Monitor
+      Serial.print("Distance: ");
+  	  delay(200);
+      Serial.print(distance);
+      delay(200);
+      Serial.println(" cm");
+  	  delay(200);
+  
+       /* if (distance < distanceThreshold) {
+       Serial.println("Ultrasonic activated!");
+       delay(150);
+       }*/
+} 
+
 
 void triggerAlarm(){
-  
 }

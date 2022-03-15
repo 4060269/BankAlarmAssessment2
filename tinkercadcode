@@ -16,23 +16,9 @@ void setup(){
   Serial.begin(9600); // opens a 9600 bit communication lane over the usb data line
 }
 
-void loop(){
-  
-  	// all of the logic to activate the pushbutton
-    int pushbuttonState = digitalRead(pushbuttonPin);
-       if (pushbuttonState == HIGH) {
-       Serial.println("Button activated!");
-       delay(150);
-       }     
-  
-    // all of the logic to activate the pir sensor
-	int pirState = digitalRead(pirPin);
- 	   if (pirState == HIGH) {
-       Serial.println("PIR activated!");
-       delay(150);
-       } 
-  
-  // all of the logic to activate the ultrasonic sensor
+// function to read the distance and return a boolean value
+boolean readDistance(){
+   // all of the logic to activate the ultrasonic sensor
     int distanceThreshold = 150;
       digitalWrite(ultratrigPin, LOW); // Clears the trigPin condition
       delayMicroseconds(2);
@@ -45,11 +31,46 @@ void loop(){
     
 	if (distance < distanceThreshold) {
        Serial.println("Ultrasonic activated!");
+  		return true;
        delay(150);
-       }
-}
+    } else {
+      return false;
+	} 
+}  
 
-
-void triggeralarmLoop(){
+void loop(){
+    // all of the logic to activate the pushbutton
+    int pushbuttonState = digitalRead(pushbuttonPin);
+       if (pushbuttonState == HIGH) {
+       Serial.println("Button activated!");
+       	delay(150);
+       } 
+       
   
+    // all of the logic to activate the pir sensor
+	int pirState = digitalRead(pirPin);
+ 	   if (pirState == HIGH) {
+       Serial.println("PIR activated!");
+          delay(150);
+       }
+  
+    readDistance() = int ultraState;
+   
+  if (pushbuttonState && pirState == HIGH) {
+    	digitalWrite(alarmPin, HIGH);
+  } else if (pushbuttonState && ultraState == HIGH) {
+    	digitalWrite(alarmPin, HIGH);
+    
+  } else if (pirState && ultraState == HIGH) {
+    digitalWrite(alarmPin, HIGH);
+    
+  } else {
+    digitalWrite(alarmPin, LOW);
+  }
 }
+
+
+/* void triggeralarmLoop(){
+   
+  
+}*/

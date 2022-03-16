@@ -65,14 +65,13 @@ boolean ultraState() {
   }
 }
 
-
   void loop() {
     if (pushbuttonState && pirState == true) {
       digitalWrite(alarmPin, HIGH);
-    } else if (pushbuttonState && ultraState == true) {
+    } else if (pushbuttonState && distance == true) {
       digitalWrite(alarmPin, HIGH);
 
-    } else if (pirState && ultraState == true) {
+    } else if (pirState && distance == true) {
       digitalWrite(alarmPin, HIGH);
 
     } else {

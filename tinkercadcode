@@ -1,15 +1,20 @@
 int alarmPin = 2; // outputpin for led
-int pushbuttonPin = 4; // inputpin for pushbutton
+int buttonPin = 4; // inputpin for pushbutton
 int pirPin = 5; // inputpin for pir sensor
 int ultratrigPin = 3; // inputpin for ultrasonic trigger pin
 int ultraechoPin = 6; // inputpin for ultrasonic echo pin
+int buttonState = 0;
+int pirState = 0;
 long duration = 0;
-int distance = 0;
+int distance = 0; // global variables here is fine since it is a small program
 
+void loop() {
+  int dummy = 0;
+}
 
 void setup() {
   pinMode(alarmPin, OUTPUT); // defining that the variable storing the pin is to be an output
-  pinMode(pushbuttonPin, INPUT); // defining that the variable storing the pin is to be an input
+  pinMode(buttonPin, INPUT); // defining that the variable storing the pin is to be an input
   pinMode(ultratrigPin, OUTPUT);
   pinMode(ultraechoPin, INPUT); // defining that the variable storing the pin is to be an input
   pinMode(pirPin, INPUT); // defining that the variable storing the pin is to be an input
@@ -17,9 +22,9 @@ void setup() {
 }
 
 // all of the logic to activate the pushbutton
-boolean pushbuttonState() {
-  int pushbuttonState = digitalRead(pushbuttonPin);
-  if (pushbuttonState == HIGH) {
+boolean buttonActivation() {
+  buttonState = digitalRead(buttonPin);
+  if (buttonState == HIGH) {
     Serial.println("Button activated!");
     return true;
     delay(150);
@@ -28,9 +33,9 @@ boolean pushbuttonState() {
   }
 }
 
-  // all of the logic to activate the pir sensor
-boolean pirState() {
-  int pirState = digitalRead(pirPin);
+// all of the logic to activate the pir sensor
+boolean pirActivation() {
+  pirState = digitalRead(pirPin);
   if (pirState == HIGH) {
     Serial.println("PIR activated!");
     return true;
@@ -40,11 +45,7 @@ boolean pirState() {
   }
 }
 
-
-// function to read the distance and return a boolean value
-// all of the logic to activate the ultrasonic sensor
-boolean ultraState() {
-  int distanceThreshold = 150;
+boolean ultraActivation() {
   digitalWrite(ultratrigPin, LOW); // Clears the trigPin condition
   delayMicroseconds(2);
   digitalWrite(ultratrigPin, HIGH); // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
@@ -54,7 +55,7 @@ boolean ultraState() {
   duration = pulseIn(ultraechoPin, HIGH); // Reads the echoPin, returns the sound wave travel time in microseconds
   distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
 
-  if (distance < distanceThreshold) {
+  if (distance < 150) {
     Serial.println("Ultrasonic activated!");
     return true;
     delay(150);
@@ -63,18 +64,19 @@ boolean ultraState() {
   }
 }
 
-read
+void alarmActivation() {
+  if (buttonState && pirState == true) {
+    Serial.print("Activated1");
+    digitalWrite(alarmPin, HIGH);
+  } else if (buttonState && distance == true) {
+    digitalWrite(alarmPin, HIGH);
+    Serial.print("Activated2");
+  } else if (pirState && distance == true) {
+    digitalWrite(alarmPin, HIGH);
+    Serial.print("Activated3");
 
-  void alarmActivate() {
-    if (pushbuttonState && pirState == true) {
-      digitalWrite(alarmPin, HIGH);
-    } else if (pushbuttonState && distance == true) {
-      digitalWrite(alarmPin, HIGH);
-
-    } else if (pirState && distance == true) {
-      digitalWrite(alarmPin, HIGH);
-
-    } else {
-      digitalWrite(alarmPin, LOW);
-    }
+  } else {
+    digitalWrite(alarmPin, LOW);
+    Serial.println("Deactivated");
   }
+}

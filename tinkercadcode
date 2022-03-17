@@ -9,12 +9,9 @@ int pirState = 0;
 long duration = 0;
 int distance = 0; // global variables here is fine since it is a small program
 
+boolean alarmSensors[3];
 
-void loop() {
-  int dummy = 0;
-}
-
-void setup() {
+void setup(){
   pinMode(alarmPin, OUTPUT); // defining that the variable storing the pin is to be an output
   pinMode(buttonPin, INPUT); // defining that the variable storing the pin is to be an input
   pinMode(ultratrigPin, OUTPUT);
@@ -23,31 +20,33 @@ void setup() {
   Serial.begin(9600); // opens a 9600 bit communication lane over the usb data line
 }
 
-// all of the logic to activate the pushbutton
-boolean buttonActivation() {
+void sensorRead(){
+  alarmSensors[0] = buttonRead();
+  alarmSensors[1] = ultraRead();
+  alarmSensors[2] = pirRead();
+}
+
+boolean buttonRead(){
   buttonState = digitalRead(buttonPin);
-  if (buttonState == HIGH) {
-    Serial.println("Button activated!");
-    return true;
-    delay(150);
+  if (buttonState == HIGH){
+    return 1;
   } else {
-    return false;
+    return 0;
   }
 }
 
-// all of the logic to activate the pir sensor
-boolean pirActivation() {
+
+boolean pirRead(){
   pirState = digitalRead(pirPin);
-  if (pirState == HIGH) {
-    Serial.println("PIR activated!");
-    return true;
-    delay(150);
+  if (pirState == HIGH){
+    return 1;
   } else {
-    return false;
+    return 0;
   }
 }
 
-boolean ultraActivation() {
+
+boolean ultraRead(){
   digitalWrite(ultratrigPin, LOW); // Clears the trigPin condition
   delayMicroseconds(2);
   digitalWrite(ultratrigPin, HIGH); // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
@@ -57,30 +56,34 @@ boolean ultraActivation() {
   duration = pulseIn(ultraechoPin, HIGH); // Reads the echoPin, returns the sound wave travel time in microseconds
   distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
 
-  if (distance < 150) {
-    Serial.println("Ultrasonic activated!");
-    return true;
+  if (distance < 150){
+    return 1;
     delay(150);
   } else {
-    return false;
+    return 0;
   }
 }
 
-void alarmActivation() {
-  if (buttonState && pirState == true) {
-    Serial.print("Activated1");
-    digitalWrite(alarmPin, HIGH);
-    
-  } else if (buttonState && distance == true) {
-    digitalWrite(alarmPin, HIGH);
-    Serial.print("Activated2");
-    
-  } else if (pirState && distance == true) {
-    digitalWrite(alarmPin, HIGH);
-    Serial.print("Activated3");
+void sensorOutput(){
+  Serial.print(alarmSensors[0]);
+  Serial.print(",");
+  Serial.print(alarmSensors[1]);
+  Serial.print(",");
+  Serial.print(alarmSensors[2]);
+  Serial.println();
+}
 
-  } else {
-    digitalWrite(alarmPin, LOW);
-    Serial.println("Deactivated");
-  }
+void loop(){
+  sensorRead();
+  sensorOutput();
+  alarmActivate();
+}
+
+void alarmActivate(){
+ int trigger = alarmSensors[0] + alarmSensors[1] + alarmSensors[2];
+    if (trigger >= 2) {
+      digitalWrite(alarmPin, HIGH);
+    } else {
+      digitalWrite(alarmPin, LOW);
+    }
 }

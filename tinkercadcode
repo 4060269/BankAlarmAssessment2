@@ -3,10 +3,12 @@ int buttonPin = 4; // inputpin for pushbutton
 int pirPin = 5; // inputpin for pir sensor
 int ultratrigPin = 3; // inputpin for ultrasonic trigger pin
 int ultraechoPin = 6; // inputpin for ultrasonic echo pin
+
 int buttonState = 0;
 int pirState = 0;
 long duration = 0;
 int distance = 0; // global variables here is fine since it is a small program
+
 
 void loop() {
   int dummy = 0;
@@ -68,9 +70,11 @@ void alarmActivation() {
   if (buttonState && pirState == true) {
     Serial.print("Activated1");
     digitalWrite(alarmPin, HIGH);
+    
   } else if (buttonState && distance == true) {
     digitalWrite(alarmPin, HIGH);
     Serial.print("Activated2");
+    
   } else if (pirState && distance == true) {
     digitalWrite(alarmPin, HIGH);
     Serial.print("Activated3");
